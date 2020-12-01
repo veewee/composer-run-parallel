@@ -87,13 +87,16 @@ final class ResultMap
     }
 
     /**
-     * @param callable(int): int $onSuccess
-     * @param callable(int): int $onFailure
+     * @template R
+     * @param callable(int): R $onSuccess
+     * @param callable(int): R $onFailure
+     *
+     * @return R
      */
     public function conclude(
         callable $onSuccess,
         callable $onFailure
-    ): int {
+    ) {
         $resultCode = $this->getResultCode();
 
         return 0 === $resultCode ? $onSuccess($resultCode) : $onFailure($resultCode);
