@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace ComposerRunParallel\Test\Result;
+namespace ComposerRunParallel\Test\Unit\Result;
 
 use PHPUnit\Framework\TestCase;
 
