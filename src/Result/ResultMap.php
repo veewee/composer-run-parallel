@@ -13,6 +13,10 @@ final class ResultMap
      */
     private $map = [];
 
+    private function __construct()
+    {
+    }
+
     public static function empty(): self
     {
         return new self();
