@@ -1,6 +1,7 @@
 {
-    "name": "phpro/composer-run-parallel",
+    "name": "veewee/composer-run-parallel",
     "description": "Run composer tasks in parallel",
+    "keywords": ["composer", "plugin", "parallel", "run", "taskmanager"],
     "type": "composer-plugin",
     "license": "MIT",
     "authors": [
@@ -10,7 +11,10 @@
         }
     ],
     "require": {
-        "php": "^7.4 || ^8.0",
+        "php": "^7.4 || ^8.0"
+    },
+    "require-dev": {
+        "composer/composer": "^2.0",
         "react/promise": "^2.8"
     },
     "autoload": {
@@ -21,18 +25,10 @@
     "extra": {
         "class": "ComposerRunParallel\\ParallelPlugin"
     },
-    "require-dev": {
-        "composer/composer": "^2.0"
-    },
     "scripts": {
-        "parallel": "ComposerRunParallel\\Scripts\\ParallelScript::run",
-        "php1": "@php -r 'sleep(5); echo \"1\";'",
-        "php2": "@php -r 'echo \"2\";'",
-        "phpfail": "@php -r 'throw new Exception(\"FAIL\");",
-        "vendor": "composer --version",
-        "sometask": "@parallel php1 phpfail php2"
+        "parallel": "ComposerRunParallel\\Scripts\\ParallelScript::initializeAndRun"
     },
     "scripts-descriptions": {
-        "parallel": "Makes it possible to run a script in parallel"
+        "parallel": "Makes it possible to run composer scripts in parallel"
     }
 }

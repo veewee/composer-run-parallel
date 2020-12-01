@@ -14,7 +14,6 @@ class ParallelPlugin implements PluginInterface, EventSubscriberInterface
 {
     public function activate(Composer $composer, IOInterface $io): void
     {
-
     }
 
     public function deactivate(Composer $composer, IOInterface $io): void
@@ -28,9 +27,7 @@ class ParallelPlugin implements PluginInterface, EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            'parallel' => function (Event $event): void {
-                ParallelScript::run($event);
-            }
+            'parallel' => new ParallelScript(),
         ];
     }
 }

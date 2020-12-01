@@ -4,62 +4,77 @@ declare(strict_types=1);
 
 namespace ComposerRunParallel\Scripts;
 
+use Composer\EventDispatcher\ScriptExecutionException;
 use Composer\Script\Event;
+use ComposerRunParallel\Assertion;
 use ComposerRunParallel\Exception\ParallelException;
 use ComposerRunParallel\Executor\AsyncTaskExecutor;
 use ComposerRunParallel\Finder\PhpExecutableFinder;
+use ComposerRunParallel\Result\ResultMap;
 use Symfony\Component\Process\Process;
-use function React\Promise\all;
 
 class ParallelScript
 {
-    public static function run(Event $event): void
+    public static function initializeAndRun(Event $event): int
+    {
+        $instance = new self();
+
+        return $instance($event);
+    }
+
+    public function __invoke(Event $event): int
     {
         $tasks = $event->getArguments();
         if (!$tasks) {
             throw ParallelException::atLeastOneTask();
         }
-
-        self::assertAllTasksAreKnown($event, $tasks);
+        Assertion\TaskIsKnown::all($event, $tasks);
 
         $loop = $event->getComposer()->getLoop();
         $io = $event->getIO();
-        $executor = new AsyncTaskExecutor($loop, new PhpExecutableFinder());
+        $executor = new AsyncTaskExecutor($loop, PhpExecutableFinder::default());
+        $resultMap = ResultMap::empty();
+
+        $io->write(['<warning>Running tasks in parallel:', ...$tasks, '</warning>']);
 
         $loop->wait(
             array_map(
                 static fn (string $task) => $executor($task, [])
                     ->then(
-                        static function (Process $process) use ($task, $io) {
-                            $io->writeError($process->getErrorOutput());
-                            $io->write($process->getOutput());
+                        static function (Process $process) use ($task, $io, $resultMap) {
+                            $resultMap->registerResult($task, $process->getExitCode());
 
-                            if (!$process->isSuccessful()) {
-                                throw new \RuntimeException('Task ' .$task .' failed.');
-                            }
+                            $io->write('<info>Finished task '.$task.'</info>');
+                            $io->writeError($process->getErrorOutput());
+                            $io->write([$process->getOutput(), '']);
                         }
                     ),
                 $tasks
             )
         );
-    }
 
-    private static function assertAllTasksAreKnown(Event $event, array $tasks): void
-    {
-        $dispatcher = $event->getComposer()->getEventDispatcher();
+        return $resultMap->conclude(
+            static function () use ($resultMap, $io) : int {
+                $io->write(['<info>Finished running', ...$resultMap->listSucceededTasks(), '</info>']);
 
-        foreach ($tasks as $task) {
-            if (!$dispatcher->hasEventListeners(self::cloneEventForTask($event, $task))) {
-                throw ParallelException::invalidTask($task);
+                return 0;
+            },
+            static function (int $resultCode) use ($io, $resultMap) : int {
+                $succeeded = $resultMap->listSucceededTasks();
+                if ($succeeded) {
+                    $io->write(['<warning>Succesfully ran: ', ...$resultMap->listSucceededTasks(), '</warning>']);
+                }
+
+                $io->writeError([
+                    '<error>Failed running: ',
+                    ...$resultMap->listFailedTasks(),
+                    '',
+                    'Not all parallel tasks were executed in parallel!',
+                    '</error>'
+                ]);
+
+                throw new ScriptExecutionException('Not all parallel tasks were executed in parallel', $resultCode);
             }
-        }
-    }
-
-    /**
-     * TODO : find out if we can set arguments from the parallel task somehow ...
-     */
-    private static function cloneEventForTask(Event $event, string $task): Event
-    {
-        return new Event($task, $event->getComposer(), $event->getIO(), $event->isDevMode(), [], $event->getFlags());
+        );
     }
 }

@@ -6,6 +6,7 @@ namespace ComposerRunParallel\Executor;
 
 use Composer\Util\Loop;
 use Composer\Util\ProcessExecutor;
+use ComposerRunParallel\Exception\ParallelException;
 use ComposerRunParallel\Finder\PhpExecutableFinder;
 use React\Promise\PromiseInterface;
 
@@ -22,7 +23,10 @@ final class AsyncTaskExecutor
 
     public function __invoke(string $task, array $args): PromiseInterface
     {
-        $executor = $this->loop->getProcessExecutor();
+        if (!$executor = $this->loop->getProcessExecutor()) {
+            throw ParallelException::noProcessExecutorDetected();
+        }
+
         $process = $this->buildProcess($task, $args);
 
         return $executor->executeAsync($process);
@@ -30,12 +34,17 @@ final class AsyncTaskExecutor
 
     private function buildProcess(string $task, array $args): string
     {
-        return sprintf(
-            '%s %s run %s %s',
+        return implode(' ', [
             ($this->phpExecutableFinder)(),
-            ProcessExecutor::escape(getenv('COMPOSER_BINARY')),
-            ProcessExecutor::escape($task),
-            implode(' ', $args)
-        );
+            ...array_map(
+                static fn (string $argument): string => ProcessExecutor::escape($argument),
+                [
+                    getenv('COMPOSER_BINARY'),
+                    'run',
+                    $task,
+                    ...$args
+                ]
+            )
+        ]);
     }
 }

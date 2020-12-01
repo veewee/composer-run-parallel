@@ -6,7 +6,7 @@ namespace ComposerRunParallel\Exception;
 
 use RuntimeException;
 
-class ParallelException extends RuntimeException
+final class ParallelException extends RuntimeException
 {
     public static function atLeastOneTask(): self
     {
@@ -19,6 +19,21 @@ class ParallelException extends RuntimeException
     {
         return new self(
             sprintf('Script "%s" is not defined in this package', $task)
+        );
+    }
+
+    public static function noResultForTaskYet(string $task): self
+    {
+        return new self(
+            sprintf('Received no result for task %s yet.', $task)
+        );
+    }
+
+    public static function noProcessExecutorDetected(): self
+    {
+        return new self(
+            'The composer Loop does not contain a ProcessExecutor. ' .
+            'Please log an issue with detailed information on how to reproduce!'
         );
     }
 }
