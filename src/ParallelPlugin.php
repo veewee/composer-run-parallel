@@ -8,9 +8,10 @@ use Composer\Composer;
 use Composer\EventDispatcher\EventSubscriberInterface;
 use Composer\IO\IOInterface;
 use Composer\Plugin\PluginInterface;
+use Composer\Script\Event;
 use ComposerRunParallel\Scripts\ParallelScript;
 
-class ParallelPlugin implements PluginInterface, EventSubscriberInterface
+final class ParallelPlugin implements PluginInterface, EventSubscriberInterface
 {
     public function activate(Composer $composer, IOInterface $io): void
     {
@@ -27,7 +28,12 @@ class ParallelPlugin implements PluginInterface, EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            'parallel' => new ParallelScript(),
+            'parallel' => 'runParallelScript',
         ];
+    }
+
+    public function runParallelScript(Event $event): int
+    {
+        return (new ParallelScript())($event);
     }
 }
