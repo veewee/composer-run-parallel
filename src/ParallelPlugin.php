@@ -6,9 +6,11 @@ namespace ComposerRunParallel;
 
 use Composer\Composer;
 use Composer\EventDispatcher\EventSubscriberInterface;
+use Composer\EventDispatcher\ScriptExecutionException;
 use Composer\IO\IOInterface;
 use Composer\Plugin\PluginInterface;
 use Composer\Script\Event;
+use ComposerRunParallel\Exception\ParallelException;
 use ComposerRunParallel\Scripts\ParallelScript;
 
 final class ParallelPlugin implements PluginInterface, EventSubscriberInterface
@@ -32,6 +34,10 @@ final class ParallelPlugin implements PluginInterface, EventSubscriberInterface
         ];
     }
 
+    /**
+     * @throws ParallelException
+     * @throws ScriptExecutionException
+     */
     public function runParallelScript(Event $event): int
     {
         return (new ParallelScript())($event);
