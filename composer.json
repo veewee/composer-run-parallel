@@ -32,7 +32,10 @@
         "fix-cs": "./tools/php-cs-fixer fix",
         "psalm": "./tools/psalm",
         "tests": "./tools/phpunit",
-        "ci": "@parallel psalm cs tests"
+        "ci": "@parallel psalm cs tests",
+        "functional": "@parallel fun1 fun2",
+        "fun1": "@php -r 'sleep(3); echo \"1\";'",
+        "fun2": "@php -r 'echo \"2\";'"
     },
     "scripts-descriptions": {
         "parallel": "Makes it possible to run composer scripts in parallel"
