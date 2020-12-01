@@ -12,7 +12,7 @@ composer require --dev veewee/composer-run-parallel
 or globally ...
 
 ```bash
-composer require --glabel veewee/composer-run-parallel
+composer require --global veewee/composer-run-parallel
 ```
 
 ## Examples
@@ -70,7 +70,7 @@ php1
 Failed running:
 phpfail
 
-Not all parallel tasks were executed in parallel!
+Not all tasks could be executed succesfully!
 ```
 
 Pretty cool right?

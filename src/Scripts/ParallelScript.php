@@ -79,11 +79,11 @@ class ParallelScript
                     '<error>Failed running: ',
                     ...$resultMap->listFailedTasks(),
                     '',
-                    'Not all parallel tasks were executed in parallel!',
+                    'Not all tasks could be executed succesfully!',
                     '</error>',
                 ]);
 
-                throw new ScriptExecutionException('Not all parallel tasks were executed in parallel', $resultCode);
+                throw new ScriptExecutionException('Not all tasks could be executed succesfully!', $resultCode);
             }
         );
     }
