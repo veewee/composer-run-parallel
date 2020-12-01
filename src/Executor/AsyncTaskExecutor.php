@@ -21,6 +21,11 @@ final class AsyncTaskExecutor
         $this->loop = $loop;
     }
 
+    /**
+     * @param list<string> $args
+     *
+     * @throws ParallelException
+     */
     public function __invoke(string $task, array $args): PromiseInterface
     {
         if (!$executor = $this->loop->getProcessExecutor()) {
@@ -32,6 +37,11 @@ final class AsyncTaskExecutor
         return $executor->executeAsync($process);
     }
 
+    /**
+     * @param list<string> $args
+     *
+     * @throws ParallelException
+     */
     private function buildProcess(string $task, array $args): string
     {
         return implode(' ', [
@@ -39,12 +49,12 @@ final class AsyncTaskExecutor
             ...array_map(
                 static fn (string $argument): string => ProcessExecutor::escape($argument),
                 [
-                    getenv('COMPOSER_BINARY'),
+                    getenv('COMPOSER_BINARY') ?: 'composer',
                     'run',
                     $task,
-                    ...$args
+                    ...$args,
                 ]
-            )
+            ),
         ]);
     }
 }

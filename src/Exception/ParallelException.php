@@ -32,8 +32,15 @@ final class ParallelException extends RuntimeException
     public static function noProcessExecutorDetected(): self
     {
         return new self(
-            'The composer Loop does not contain a ProcessExecutor. ' .
+            'The composer Loop does not contain a ProcessExecutor. '.
             'Please log an issue with detailed information on how to reproduce!'
+        );
+    }
+
+    public static function phpBinaryNotFound(): self
+    {
+        return new self(
+            'Failed to locate PHP binary to execute.'
         );
     }
 }

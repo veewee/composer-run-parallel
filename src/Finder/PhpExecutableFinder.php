@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace ComposerRunParallel\Finder;
 
 use Composer\Util\ProcessExecutor;
+use ComposerRunParallel\Exception\ParallelException;
 use Symfony\Component\Process\PhpExecutableFinder as SymfonyPhpExecutableFinder;
 
 final class PhpExecutableFinder
@@ -22,23 +23,25 @@ final class PhpExecutableFinder
     }
 
     /**
-     * Borrowed from Composer internals:
+     * Borrowed from Composer internals:.
      *
      * @see \Composer\EventDispatcher\EventDispatcher::getPhpExecCommand()
+     *
+     * @throws ParallelException
      */
     public function __invoke(): string
     {
         $phpPath = $this->finder->find(false);
         if (!$phpPath) {
-            throw new \RuntimeException('Failed to locate PHP binary to execute '.$phpPath);
+            throw ParallelException::phpBinaryNotFound();
         }
 
         $phpArgs = $this->finder->findArguments();
-        $phpArgs = $phpArgs ? ' ' . implode(' ', $phpArgs) : '';
-        $allowUrlFOpenFlag = ' -d allow_url_fopen=' . ProcessExecutor::escape(ini_get('allow_url_fopen'));
-        $disableFunctionsFlag = ' -d disable_functions=' . ProcessExecutor::escape(ini_get('disable_functions'));
-        $memoryLimitFlag = ' -d memory_limit=' . ProcessExecutor::escape(ini_get('memory_limit'));
+        $phpArgs = $phpArgs ? ' '.implode(' ', $phpArgs) : '';
+        $allowUrlFOpenFlag = ' -d allow_url_fopen='.ProcessExecutor::escape(ini_get('allow_url_fopen'));
+        $disableFunctionsFlag = ' -d disable_functions='.ProcessExecutor::escape(ini_get('disable_functions'));
+        $memoryLimitFlag = ' -d memory_limit='.ProcessExecutor::escape(ini_get('memory_limit'));
 
-        return ProcessExecutor::escape($phpPath) . $phpArgs . $allowUrlFOpenFlag . $disableFunctionsFlag . $memoryLimitFlag;
+        return ProcessExecutor::escape($phpPath).$phpArgs.$allowUrlFOpenFlag.$disableFunctionsFlag.$memoryLimitFlag;
     }
 }

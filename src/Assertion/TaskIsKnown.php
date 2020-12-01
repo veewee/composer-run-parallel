@@ -21,6 +21,8 @@ final class TaskIsKnown
     }
 
     /**
+     * @param list<string> $tasks
+     *
      * @throws ParallelException
      */
     public static function all(Event $event, array $tasks): void

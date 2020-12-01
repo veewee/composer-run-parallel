@@ -23,6 +23,9 @@ final class ResultMap
         $this->map[$task] = $result;
     }
 
+    /**
+     * @throws ParallelException
+     */
     public function resultFor(string $task): int
     {
         if (!array_key_exists($task, $this->map)) {
@@ -33,25 +36,39 @@ final class ResultMap
     }
 
     /**
+     * @throws ParallelException
+     *
      * @return list<string>
      */
     public function listFailedTasks(): array
     {
         return array_reduce(
             array_keys($this->map),
-            fn (array $failed, string $task) => $this->resultFor($task) > 0 ? [...$failed, $task] : $failed,
+            /**
+             * @param list<string> $failed
+             *
+             * @return list<string>
+             */
+            fn (array $failed, string $task): array => $this->resultFor($task) > 0 ? [...$failed, $task] : $failed,
             []
         );
     }
 
     /**
+     *     @throws ParallelException
+     *
      * @return list<string>
      */
     public function listSucceededTasks(): array
     {
         return array_reduce(
             array_keys($this->map),
-            fn (array $succeeded, string $task) => $this->resultFor($task) === 0 ? [...$succeeded, $task] : $succeeded,
+            /**
+             * @param list<string> $succeeded
+             *
+             * @return list<string>
+             */
+            fn (array $succeeded, string $task): array => 0 === $this->resultFor($task) ? [...$succeeded, $task] : $succeeded,
             []
         );
     }
@@ -60,7 +77,7 @@ final class ResultMap
     {
         return array_reduce(
             $this->map,
-            fn (int $highest, $value) => max($highest, $value),
+            fn (int $highest, int $value): int => (int) max($highest, $value),
             0
         );
     }
@@ -68,16 +85,13 @@ final class ResultMap
     /**
      * @param callable(int): int $onSuccess
      * @param callable(int): int $onFailure
-     *
-     * @return int
      */
     public function conclude(
         callable $onSuccess,
         callable $onFailure
-    ): int
-    {
+    ): int {
         $resultCode = $this->getResultCode();
 
-        return $resultCode === 0 ? $onSuccess($resultCode) : $onFailure($resultCode);
+        return 0 === $resultCode ? $onSuccess($resultCode) : $onFailure($resultCode);
     }
 }

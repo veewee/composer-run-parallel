@@ -1,0 +1,12 @@
+<?php
+namespace React\Promise;
+
+interface PromiseInterface
+{
+    /**
+     * @param callable(mixed): mixed $fulfilledHandler
+     * @param callable(\Exception): mixed $errorHandler
+     * @param null $progressHandler
+     */
+    public function then($fulfilledHandler = null, $errorHandler = null, $progressHandler = null): PromiseInterface;
+}
