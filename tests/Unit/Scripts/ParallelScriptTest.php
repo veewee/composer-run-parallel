@@ -59,7 +59,6 @@ class ParallelScriptTest extends TestCase
         );
     }
 
-
     /** @test */
     public function it_fails_if_there_are_not_tasks_specified(): void
     {
@@ -90,7 +89,7 @@ class ParallelScriptTest extends TestCase
         self::assertEquals(0, $result);
 
         $output = $this->io->getOutput();
-        self::assertStringContainsString('Finished running: ' . PHP_EOL . 'task1', $output);
+        self::assertStringContainsString('Finished running: '.PHP_EOL.'task1', $output);
     }
 
     /** @test */
@@ -105,14 +104,13 @@ class ParallelScriptTest extends TestCase
         try {
             ($this->script)($this->createEvent(['task1', 'task2']));
         } catch (ScriptExecutionException $exception) {
-
         }
 
         self::assertInstanceOf(ScriptExecutionException::class, $exception);
 
         $output = $this->io->getOutput();
-        self::assertStringContainsString('Succesfully ran: ' . PHP_EOL . 'task2', $output);
-        self::assertStringContainsString('Failed running: ' . PHP_EOL . 'task1', $output);
+        self::assertStringContainsString('Succesfully ran: '.PHP_EOL.'task2', $output);
+        self::assertStringContainsString('Failed running: '.PHP_EOL.'task1', $output);
         self::assertStringContainsString('Not all tasks could be executed successfully!', $output);
     }
 
