@@ -26,4 +26,11 @@ final class PhpExecutableFinderTest extends TestCase
         $phpExecutableFinder = new PhpExecutableFinder($finder);
         $phpExecutableFinder();
     }
+
+    /** @test */
+    public function it_can_create_a_default_finder(): void
+    {
+        $phpExecutableFinder = PhpExecutableFinder::default();
+        self::assertInstanceOf(PhpExecutableFinder::class, $phpExecutableFinder);
+    }
 }

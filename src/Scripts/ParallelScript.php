@@ -72,7 +72,7 @@ class ParallelScript
 
         return $resultMap->conclude(
             static function () use ($resultMap, $io): int {
-                $io->write(['<info>Finished running', ...$resultMap->listSucceededTasks(), '</info>']);
+                $io->write(['<info>Finished running: ', ...$resultMap->listSucceededTasks(), '</info>']);
 
                 return 0;
             },
@@ -86,7 +86,7 @@ class ParallelScript
                     '<error>Failed running: ',
                     ...$resultMap->listFailedTasks(),
                     '',
-                    'Not all tasks could be executed succesfully!',
+                    'Not all tasks could be executed successfully!',
                     '</error>',
                 ]);
 

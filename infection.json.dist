@@ -4,6 +4,8 @@
             "src"
         ]
     },
+    "minMsi": 100,
+    "minCoveredMsi": 100,
     "phpUnit": {
         "customPath": ".\/tools\/phpunit.phar"
     },

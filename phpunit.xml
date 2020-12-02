@@ -23,7 +23,8 @@
             <directory suffix=".php">src</directory>
         </include>
         <report>
-            <clover outputFile=".phpunit.cache/clover.xml" />
+            <clover outputFile=".phpunit.cache/clover/clover.xml" />
+            <html outputDirectory=".phpunit.cache/report" lowUpperBound="99" highLowerBound="99" />
         </report>
     </coverage>
 </phpunit>
