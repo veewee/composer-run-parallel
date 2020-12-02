@@ -10,7 +10,7 @@ use ComposerRunParallel\ParallelPlugin;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers ComposerRunParallel\ParallelPlugin
+ * @covers \ComposerRunParallel\ParallelPlugin
  */
 final class ParallelPluginTest extends TestCase
 {
@@ -32,6 +32,5 @@ final class ParallelPluginTest extends TestCase
     /** @test */
     public function it_can_run_the_parallel_script(): void
     {
-
     }
 }

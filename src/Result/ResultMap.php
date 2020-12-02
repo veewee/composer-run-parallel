@@ -88,6 +88,7 @@ final class ResultMap
 
     /**
      * @template R
+     *
      * @param callable(int): R $onSuccess
      * @param callable(int): R $onFailure
      *

@@ -13,7 +13,7 @@ use ComposerRunParallel\Exception\ParallelException;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers ComposerRunParallel\Assertion\TaskIsKnown
+ * @covers \ComposerRunParallel\Assertion\TaskIsKnown
  */
 final class TaskIsKnownTest extends TestCase
 {

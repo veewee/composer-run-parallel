@@ -73,6 +73,12 @@ phpfail
 Not all tasks could be executed succesfully!
 ```
 
+*Note*: You can also use the shorthand command:
+
+```bash
+composer parallel php1 phpfail
+```
+
 Pretty cool right?
 What If I told you there is even more?!
 
