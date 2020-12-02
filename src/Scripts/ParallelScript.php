@@ -16,13 +16,20 @@ use Symfony\Component\Process\Process;
 
 class ParallelScript
 {
+    private PhpExecutableFinder $executableFinder;
+
+    public function __construct(PhpExecutableFinder $executableFinder)
+    {
+        $this->executableFinder = $executableFinder;
+    }
+
     /**
      * @throws ParallelException
      * @throws ScriptExecutionException
      */
     public static function initializeAndRun(Event $event): int
     {
-        $instance = new self();
+        $instance = new self(PhpExecutableFinder::default());
 
         return $instance($event);
     }
@@ -42,7 +49,7 @@ class ParallelScript
 
         $loop = $event->getComposer()->getLoop();
         $io = $event->getIO();
-        $executor = new AsyncTaskExecutor($loop, PhpExecutableFinder::default());
+        $executor = new AsyncTaskExecutor($loop, $this->executableFinder);
         $resultMap = ResultMap::empty();
 
         $io->write(['<warning>Running tasks in parallel:', ...$tasks, '</warning>']);

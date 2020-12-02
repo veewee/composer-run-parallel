@@ -53,6 +53,6 @@ final class ParallelPlugin implements PluginInterface, EventSubscriberInterface,
      */
     public function runParallelScript(Event $event): int
     {
-        return (new ParallelScript())($event);
+        return ParallelScript::initializeAndRun($event);
     }
 }

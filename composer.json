@@ -38,7 +38,12 @@
         "fix-cs": "./tools/php-cs-fixer.phar fix",
         "psalm": "./tools/psalm.phar",
         "tests": "./tools/phpunit.phar",
-        "ci": "@parallel psalm cs tests",
+        "coverage": "@php ./tools/full-coverage-check.php .phpunit.cache/clover.xml",
+        "infection": "./tools/infection.phar",
+        "ci": [
+            "@parallel psalm cs tests",
+            "@parallel coverage infection"
+        ],
         "functional": "@parallel fun1 fun2",
         "fun1": "@php -r \"sleep(3); echo '1';\"",
         "fun2": "@php -r \"echo '2';\""

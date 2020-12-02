@@ -22,4 +22,6 @@ jobs:
             - name: Install dependencies
               run: composer update --prefer-dist --no-progress --no-suggest
             - name: Run the tests
-              run: composer run tests
+              run: |
+                composer run tests
+                composer parallel coverage infection
