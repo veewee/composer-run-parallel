@@ -3,6 +3,8 @@
 This composer plugin allows you to run the tasks inside your composer file in parallel.
 No more waiting on one specific task!
 
+[Please find my blog post describing the whole story.](https://veewee.github.io/blog/run-composer-tasks-in-parallel/)
+
 ## Installation
 
 ```bash
