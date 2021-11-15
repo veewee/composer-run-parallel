@@ -81,7 +81,7 @@ final class ResultMap
     {
         return array_reduce(
             $this->map,
-            fn (int $highest, int $value): int => (int) max($highest, $value),
+            fn (int $highest, int $value): int => max($highest, $value),
             0
         );
     }

@@ -1,5 +1,5 @@
 /vendor/
 .phpunit.cache
-.php_cs.cache
+.php-cs-fixer.cache
 composer.lock
 infection.log
