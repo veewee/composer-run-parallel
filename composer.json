@@ -11,7 +11,7 @@
         }
     ],
     "require": {
-        "php": "^7.4 || ^8.0",
+        "php": "^7.4 || ^8.0.0 || ^8.1.0",
         "composer-plugin-api": "~2.0"
     },
     "require-dev": {
@@ -35,7 +35,7 @@
     "scripts": {
         "parallel": "ComposerRunParallel\\Scripts\\ParallelScript::initializeAndRun",
         "cs": "@fix-cs --dry-run",
-        "fix-cs": "./tools/php-cs-fixer.phar fix",
+        "fix-cs": "PHP_CS_FIXER_IGNORE_ENV=1 ./tools/php-cs-fixer.phar fix",
         "psalm": "./tools/psalm.phar",
         "tests": "./tools/phpunit.phar",
         "coverage": "@php ./tools/full-coverage-check.php .phpunit.cache/clover/clover.xml",

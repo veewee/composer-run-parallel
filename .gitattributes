@@ -6,5 +6,5 @@ tools/          export-ignore
 /.gitignore     export-ignore
 /phpunit.xml    export-ignore
 /phive.xml      export-ignore
-/php_cs.dist    export-ignore
+.php-cs-fixer.dist.php    export-ignore
 /psalm.xml      export-ignore

@@ -36,6 +36,7 @@ final class PhpExecutableFinder
             throw ParallelException::phpBinaryNotFound();
         }
 
+        /** @var list<string> $phpArgs */
         $phpArgs = $this->finder->findArguments();
         $phpArgs = $phpArgs ? ' '.implode(' ', $phpArgs) : '';
         $allowUrlFOpenFlag = ' -d allow_url_fopen='.ProcessExecutor::escape(ini_get('allow_url_fopen'));
