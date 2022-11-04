@@ -22,10 +22,10 @@ final class AsyncTaskExecutorTest extends TestCase
 {
     private AsyncTaskExecutor $asyncTaskExecutor;
 
-    /** @var MockObject & Loop */
+    /** @var Loop&MockObject */
     private MockObject $loop;
 
-    /** @var MockObject & ProcessExecutor */
+    /** @var MockObject&ProcessExecutor */
     private MockObject $processExecutor;
 
     protected function setUp(): void

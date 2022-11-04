@@ -30,7 +30,7 @@ class ParallelScriptTest extends TestCase
     private Composer $composer;
     private ParallelScript $script;
 
-    /** @var MockObject & ProcessExecutor */
+    /** @var MockObject&ProcessExecutor */
     private MockObject $processExecutor;
 
     protected function setUp(): void
