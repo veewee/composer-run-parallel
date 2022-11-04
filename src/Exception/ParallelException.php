@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace ComposerRunParallel\Exception;
 
-use RuntimeException;
-
-final class ParallelException extends RuntimeException
+final class ParallelException extends \RuntimeException
 {
     public static function atLeastOneTask(): self
     {
