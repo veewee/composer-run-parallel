@@ -41,13 +41,19 @@ class ParallelScriptTest extends TestCase
         $finder->method('find')->willReturn('php');
         $finder->method('findArguments')->willReturn([]);
 
+        // Composer comes with symfony console 2.8, which has deprecated methods:
+        // Deprecated: Return type of Symfony\Component\Console\Helper\HelperSet::getIterator() should either be compatible with IteratorAggregate::getIterator(): Traversable,
+        // Since it's a composer dependency, we can't change it, so we need to suppress the deprecation notice
+        // Let's mute it for now.
+        $previousErrorLevel = error_reporting(0);
         $this->io = new BufferIO();
+        error_reporting($previousErrorLevel);
 
         $dispatcher = $this->createMock(EventDispatcher::class);
         $dispatcher
             ->method('hasEventListeners')
             ->will($this->returnCallback(
-                static fn (Event $event) => in_array($event->getName(), ['task1', 'task2'], true)
+                static fn (Event $event) => in_array($event->getName(), ['task1', 'task2', 'task3', 'task4'], true)
             ));
 
         $this->composer = new Composer();
@@ -81,15 +87,19 @@ class ParallelScriptTest extends TestCase
     public function it_can_successfully_run_scripts_in_parallel(): void
     {
         $this->processExecutor->method('executeAsync')->willReturn(
+            $this->createProcessResult(true),
             $this->createProcessResult(true)
         );
 
-        $result = ($this->script)($this->createEvent(['task1']));
+        $result = ($this->script)($this->createEvent(['task1', 'task2']));
 
         self::assertEquals(0, $result);
 
         $output = $this->io->getOutput();
-        self::assertStringContainsString('Finished running: '.PHP_EOL.'task1', $output);
+        self::assertStringContainsString('Running tasks in parallel:'.PHP_EOL.'task1'.PHP_EOL.'task2'.PHP_EOL, $output);
+        self::assertStringContainsString('Finished task task1'.PHP_EOL.'stderr'.PHP_EOL.'stdout'.PHP_EOL, $output);
+        self::assertStringContainsString('Finished task task2'.PHP_EOL.'stderr'.PHP_EOL.'stdout'.PHP_EOL, $output);
+        self::assertStringContainsString('Finished running: '.PHP_EOL.'task1'.PHP_EOL.'task2', $output);
     }
 
     /** @test */
@@ -97,20 +107,28 @@ class ParallelScriptTest extends TestCase
     {
         $this->processExecutor->method('executeAsync')->willReturn(
             $this->createProcessResult(false),
+            $this->createProcessResult(true),
+            $this->createProcessResult(false),
             $this->createProcessResult(true)
         );
         $exception = null;
 
         try {
-            ($this->script)($this->createEvent(['task1', 'task2']));
+            ($this->script)($this->createEvent(['task1', 'task2', 'task3', 'task4']));
         } catch (ScriptExecutionException $exception) {
         }
 
         self::assertInstanceOf(ScriptExecutionException::class, $exception);
+        self::assertSame(1, $exception->getCode());
 
         $output = $this->io->getOutput();
-        self::assertStringContainsString('Succesfully ran: '.PHP_EOL.'task2', $output);
-        self::assertStringContainsString('Failed running: '.PHP_EOL.'task1', $output);
+        self::assertStringContainsString('Running tasks in parallel:'.PHP_EOL.'task1'.PHP_EOL.'task2'.PHP_EOL.'task3'.PHP_EOL.'task4'.PHP_EOL, $output);
+        self::assertStringContainsString('Finished task task1'.PHP_EOL.'stderr'.PHP_EOL.'stdout'.PHP_EOL, $output);
+        self::assertStringContainsString('Finished task task2'.PHP_EOL.'stderr'.PHP_EOL.'stdout'.PHP_EOL, $output);
+        self::assertStringContainsString('Finished task task3'.PHP_EOL.'stderr'.PHP_EOL.'stdout'.PHP_EOL, $output);
+        self::assertStringContainsString('Finished task task4'.PHP_EOL.'stderr'.PHP_EOL.'stdout'.PHP_EOL, $output);
+        self::assertStringContainsString('Succesfully ran: '.PHP_EOL.'task2'.PHP_EOL.'task4', $output);
+        self::assertStringContainsString('Failed running: '.PHP_EOL.'task1'.PHP_EOL.'task3', $output);
         self::assertStringContainsString('Not all tasks could be executed successfully!', $output);
     }
 

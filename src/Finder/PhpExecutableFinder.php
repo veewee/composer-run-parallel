@@ -32,7 +32,7 @@ final class PhpExecutableFinder
     public function __invoke(): string
     {
         $phpPath = $this->finder->find(false);
-        if (!$phpPath) {
+        if (false === $phpPath) {
             throw ParallelException::phpBinaryNotFound();
         }
 

@@ -59,7 +59,7 @@ final class ResultMap
     }
 
     /**
-     *     @throws ParallelException
+     * @throws ParallelException
      *
      * @return list<string>
      */
@@ -96,7 +96,7 @@ final class ResultMap
      */
     public function conclude(
         callable $onSuccess,
-        callable $onFailure
+        callable $onFailure,
     ) {
         $resultCode = $this->getResultCode();
 
