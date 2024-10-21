@@ -61,7 +61,7 @@ class ParallelScript
                         static function (Process $process) use ($task, $io, $resultMap): void {
                             $resultMap->registerResult($task, (int) $process->getExitCode());
 
-                            $io->write('<info>Finished task '.$task.'</info>');
+                            $io->write(sprintf('<info>Finished task %s</info>', $task));
                             $io->writeError($process->getErrorOutput());
                             $io->write([$process->getOutput(), '']);
                         }

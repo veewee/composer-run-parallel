@@ -13,6 +13,11 @@
         "text": "infection.log"
     },
     "mutators": {
-        "@default": true
+        "@default": true,
+        "CastInt": {
+            "ignore": [
+                "ComposerRunParallel\\Scripts\\ParallelScript::__invoke"
+            ]
+        }
     }
 }

@@ -41,6 +41,8 @@ final class AsyncTaskExecutor
      * @param list<string> $args
      *
      * @throws ParallelException
+     *
+     * @psalm-suppress RiskyTruthyFalsyComparison
      */
     private function buildProcess(string $task, array $args): string
     {
