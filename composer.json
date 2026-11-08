@@ -17,7 +17,7 @@
     "require-dev": {
         "composer/composer": "^2.0",
         "react/promise": "1.2.1",
-        "symfony/process": "2.8.52"
+        "symfony/process": "^2.8.52 || ^3.4.35 || ^4.4 || ^5.0 || ^6.0"
     },
     "autoload": {
         "psr-4": {
