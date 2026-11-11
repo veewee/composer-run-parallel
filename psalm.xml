@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <psalm
     strictBinaryOperands="true"
-    phpVersion="8.1"
+    phpVersion="8.3"
     allowStringToStandInForClass="true"
     rememberPropertyAssignmentsAfterCall="false"
     skipChecksOnUnresolvableIncludes="false"
