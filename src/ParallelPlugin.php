@@ -16,20 +16,25 @@ use ComposerRunParallel\Command\ParallelCommandsProvider;
 use ComposerRunParallel\Exception\ParallelException;
 use ComposerRunParallel\Scripts\ParallelScript;
 
+/** @psalm-api */
 final class ParallelPlugin implements PluginInterface, EventSubscriberInterface, Capable
 {
+    #[\Override]
     public function activate(Composer $composer, IOInterface $io): void
     {
     }
 
+    #[\Override]
     public function deactivate(Composer $composer, IOInterface $io): void
     {
     }
 
+    #[\Override]
     public function uninstall(Composer $composer, IOInterface $io): void
     {
     }
 
+    #[\Override]
     public static function getSubscribedEvents(): array
     {
         return [
@@ -40,6 +45,7 @@ final class ParallelPlugin implements PluginInterface, EventSubscriberInterface,
     /**
      * @return array<class-string, class-string>
      */
+    #[\Override]
     public function getCapabilities(): array
     {
         return [
