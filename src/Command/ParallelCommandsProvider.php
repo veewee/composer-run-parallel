@@ -7,8 +7,9 @@ namespace ComposerRunParallel\Command;
 use Composer\Command\ScriptAliasCommand;
 use Composer\Plugin\Capability\CommandProvider;
 
-class ParallelCommandsProvider implements CommandProvider
+final class ParallelCommandsProvider implements CommandProvider
 {
+    #[\Override]
     /**
      * @return list<ScriptAliasCommand>
      */

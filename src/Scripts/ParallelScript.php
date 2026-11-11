@@ -14,7 +14,8 @@ use ComposerRunParallel\Result\ResultMap;
 use React\Promise\PromiseInterface;
 use Symfony\Component\Process\Process;
 
-class ParallelScript
+/** @psalm-api */
+final class ParallelScript
 {
     private PhpExecutableFinder $executableFinder;
 
