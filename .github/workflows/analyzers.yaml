@@ -23,4 +23,3 @@ jobs:
               run: composer update --prefer-dist --no-progress --no-suggest ${{ matrix.composer-options }}
             - name: Run the tests
               run: composer run psalm
-              continue-on-error: ${{ matrix.php-versions == '8.4' || matrix.php-versions == '8.5' || matrix.php-versions == '8.6' }}
